@@ -219,7 +219,7 @@
         let timeLeft = 60; // 1 Menit
         let timerInterval = null;
 
-        // WEB AUDIO SYNTHESIZER (Tanpa File Eksternal)
+        // WEB AUDIO SYNTHESIZER (AUDIO FULL VOLUME KENCANG)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(type) {
@@ -229,52 +229,56 @@
             
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
+            const compressor = audioCtx.createDynamicsCompressor();
+
+            // Rangkaian Audio: Oscillator -> Gain -> Compressor -> Speakers
             osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            gain.connect(compressor);
+            compressor.connect(audioCtx.destination);
 
             const now = audioCtx.currentTime;
 
             if (type === 'correct') {
-                // Suara Ting-Ting Ceria (Arpeggio Major)
-                osc.type = 'sine';
+                // Suara Ting-Ting Ceria Full Volume
+                osc.type = 'triangle';
                 osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
-                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
 
-                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
 
                 osc.start(now);
                 osc.stop(now + 0.6);
             } else if (type === 'wrong') {
-                // Suara Tet-Tet Salah
+                // Suara Tet-Tet Salah Full Volume
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(180, now);
-                osc.frequency.setValueAtTime(130, now + 0.15);
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(140, now + 0.15);
 
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
 
                 osc.start(now);
-                osc.stop(now + 0.4);
+                osc.stop(now + 0.45);
             } else if (type === 'warning') {
-                // Suara Bip Peringatan 10 Detik
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, now); // A5
+                // Suara Bip Peringatan 10 Detik Full Volume
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(950, now);
 
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                gain.gain.setValueAtTime(0.8, now); // VOLUME KENCANG
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
 
                 osc.start(now);
-                osc.stop(now + 0.1);
+                osc.stop(now + 0.12);
             } else if (type === 'timeout') {
-                // Suara Waktu Habis
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, now);
-                osc.frequency.setValueAtTime(150, now + 0.2);
+                // Suara Waktu Habis Full Volume
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(350, now);
+                osc.frequency.setValueAtTime(180, now + 0.2);
 
-                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
 
                 osc.start(now);
@@ -338,7 +342,7 @@
                     timerIcon.classList.add('timer-warning');
                     timerBar.className = 'bg-rose-500 h-full transition-all duration-1000 linear';
                     
-                    // Bunyi peringatan setiap detik
+                    // Bunyi peringatan kencang setiap detik
                     playSound('warning');
                 } else {
                     timerBar.className = 'bg-amber-400 h-full transition-all duration-1000 linear';
