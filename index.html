@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti Library untuk Kembang Api -->
+    <!-- Canvas Confetti Library untuk Kembang Api & Konfeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -38,53 +38,59 @@
     </script>
 
     <style>
-        /* ANIMASI BACKGROUND BERGERAK MATEMATIKA */
+        /* ANIMASI LATAR BELAKANG BERGERAK MATEMATIKA */
         body {
-            background-color: #0f172a;
-            overflow-x: hidden;
+            background-color: #0c192e;
             position: relative;
+            overflow-x: hidden;
         }
 
-        .animated-bg {
+        /* Continuous Moving Grid & Math Background */
+        .math-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
-            background: linear-gradient(135deg, #0ea5e9, #3b82f6, #6366f1);
-            overflow: hidden;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(rgba(56, 189, 248, 0.25) 2px, transparent 2px),
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px, 64px 64px, 64px 64px;
+            animation: moveBg 25s linear infinite;
         }
 
+        @keyframes moveBg {
+            0% {
+                background-position: 0 0, 0 0, 0 0;
+            }
+            100% {
+                background-position: 320px 640px, 320px 320px, 320px 320px;
+            }
+        }
+
+        /* Floating Math Elements */
         .math-symbol {
             position: absolute;
-            color: rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.15);
             font-family: 'Fredoka', sans-serif;
             font-weight: bold;
             user-select: none;
-            animation: floatUp 12s infinite linear;
+            animation: floatSymbol 12s ease-in-out infinite alternate;
         }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(110vh) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg) scale(1.2);
-                opacity: 0;
-            }
+        @keyframes floatSymbol {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-30px) rotate(15deg) scale(1.1); }
+            100% { transform: translateY(20px) rotate(-15deg) scale(0.95); }
         }
 
         .glass-box {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            border: 4px solid rgba(56, 189, 248, 0.6);
         }
 
         .btn-bounce:active {
@@ -100,18 +106,57 @@
             animation: pulse-timer 0.6s infinite;
             color: #EF4444 !important;
         }
+
+        /* ANIMASI EMOTICON SEDIH SAAT SALAH */
+        @keyframes floatSadEmot {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -40%) scale(0.4) rotate(-10deg);
+            }
+            25% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+            }
+            75% {
+                opacity: 1;
+                transform: translate(-50%, -70%) scale(1) rotate(5deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -100%) scale(0.8) rotate(0deg);
+            }
+        }
+
+        .animate-sad-emot {
+            animation: floatSadEmot 1.4s ease-out forwards;
+        }
     </style>
 </head>
 <body class="font-sans text-slate-800 min-h-full flex flex-col justify-between antialiased">
 
-    <!-- LATAR BELAKANG ANIMASI SIMBOL MATEMATIKA BERGERAK -->
-    <div class="animated-bg" id="mathBg"></div>
+    <!-- MATEMATIKA ANIMATED BACKGROUND -->
+    <div class="math-bg"></div>
+
+    <!-- SIMBOL MATEMATIKA MELAYANG DI BACKGROUND -->
+    <div class="math-symbol text-6xl top-[10%] left-[5%]" style="animation-delay: 0s;">+</div>
+    <div class="math-symbol text-7xl top-[20%] right-[8%]" style="animation-delay: -2s;">−</div>
+    <div class="math-symbol text-5xl top-[60%] left-[8%]" style="animation-delay: -4s;">×</div>
+    <div class="math-symbol text-6xl top-[75%] right-[12%]" style="animation-delay: -6s;">÷</div>
+    <div class="math-symbol text-8xl top-[40%] right-[45%]" style="animation-delay: -3s; color: rgba(255, 255, 255, 0.08);">12−5</div>
+    <div class="math-symbol text-5xl top-[85%] left-[40%]" style="animation-delay: -5s;">=</div>
+
+    <!-- OVERLAY EMOTICON SEDIH (DITAMPILKAN KETIKA JAWABAN SALAH) -->
+    <div id="sadOverlay" class="fixed inset-0 pointer-events-none z-50 hidden">
+        <div id="sadEmoji" class="absolute top-1/2 left-1/2 text-8xl md:text-9xl filter drop-shadow-2xl">
+            😭
+        </div>
+    </div>
 
     <!-- HEADER -->
-    <header class="bg-sky-600/90 backdrop-blur-md text-white shadow-lg border-b-4 border-sky-700 relative z-10">
+    <header class="bg-sky-500/90 backdrop-blur-md text-white shadow-xl border-b-4 border-sky-600 relative z-10">
         <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('loginScreen')">
-                <div class="w-10 h-10 rounded-2xl bg-amber-400 text-sky-900 flex items-center justify-center font-bold text-xl shadow">
+                <div class="w-10 h-10 rounded-2xl bg-amber-400 text-sky-900 flex items-center justify-center font-bold text-xl shadow-lg border-2 border-amber-200">
                     <i class="fa-solid fa-calculator"></i>
                 </div>
                 <div>
@@ -121,7 +166,7 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <div id="playerBadge" class="hidden bg-sky-800/60 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
+                <div id="playerBadge" class="hidden bg-sky-700/80 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
                     <i class="fa-solid fa-user-ninja mr-1"></i> <span id="playerNameDisplay">Siswa</span>
                 </div>
                 <!-- SKOR DI HEADER -->
@@ -137,13 +182,13 @@
     <main class="max-w-2xl w-full mx-auto p-4 my-auto relative z-10 flex-grow flex items-center justify-center">
 
         <!-- 1. HALAMAN LOGIN/MULAI -->
-        <section id="loginScreen" class="w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl border-4 border-sky-300 text-center">
+        <section id="loginScreen" class="w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl text-center">
             <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-amber-100 border-4 border-amber-400 flex items-center justify-center text-4xl text-amber-500 shadow-inner">
                 <i class="fa-solid fa-face-smile-wink"></i>
             </div>
 
             <h2 class="font-fredoka text-3xl font-bold text-sky-900 mb-2">Siap Belajar Pengurangan?</h2>
-            <p class="text-slate-600 text-sm md:text-base max-w-sm mx-auto mb-6">
+            <p class="text-slate-600 text-sm md:text-base max-w-sm mx-auto mb-6 font-medium">
                 Ada 5 soal tantangan. Waktumu <b>1 menit per soal</b>! Pastikan suaramu aktif ya 🔊
             </p>
 
@@ -161,7 +206,7 @@
         </section>
 
         <!-- 2. HALAMAN KUIS / SOAL -->
-        <section id="quizScreen" class="hidden w-full glass-box rounded-3xl p-5 md:p-8 shadow-2xl border-4 border-sky-300">
+        <section id="quizScreen" class="hidden w-full glass-box rounded-3xl p-5 md:p-8 shadow-2xl">
             <!-- STATUS BAR & TIMER -->
             <div class="flex items-center justify-between mb-4 bg-sky-50 p-3 rounded-2xl border border-sky-200">
                 <div class="flex items-center space-x-2">
@@ -208,7 +253,7 @@
         </section>
 
         <!-- 3. HALAMAN HASIL / SKOR -->
-        <section id="resultScreen" class="hidden w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl border-4 border-sky-300 text-center">
+        <section id="resultScreen" class="hidden w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl text-center">
             <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-amber-100 border-4 border-amber-400 flex items-center justify-center text-5xl text-amber-500 shadow-md">
                 <i class="fa-solid fa-trophy"></i>
             </div>
@@ -241,52 +286,12 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-sky-900/80 backdrop-blur-md text-sky-200 text-xs text-center py-3 font-medium border-t border-sky-700 relative z-10">
+    <footer class="bg-sky-900/80 backdrop-blur-md text-sky-200 text-xs text-center py-3 font-medium border-t border-sky-700/50 relative z-10">
         <p>&copy; 2026 Kuis Matematika SD Kelas 2 — Belajar Pengurangan Ceria</p>
     </footer>
 
     <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // GENERATE BACKGROUND MATEMATIKA BERGERAK
-        function createMathBackground() {
-            const bgContainer = document.getElementById('mathBg');
-            const symbols = ['-', '+', '=', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '✖', '➗'];
-            const count = 30; // Jumlah elemen bergerak
-
-            for (let i = 0; i < count; i++) {
-                const span = document.createElement('span');
-                span.className = 'math-symbol';
-                span.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                
-                // Variasi posisi, ukuran, dan kecepatan animasi
-                span.style.left = `${Math.random() * 100}%`;
-                span.style.fontSize = `${Math.random() * 2.5 + 1.5}rem`;
-                span.style.animationDuration = `${Math.random() * 8 + 8}s`;
-                span.style.animationDelay = `${Math.random() * 5}s`;
-
-                bgContainer.appendChild(span);
-            }
-        }
-        createMathBackground();
-
-        // EFEK KEMBANG API / KONFETI BANYAK
-        function triggerFireworks() {
-            // Tembakan dari kiri
-            confetti({
-                particleCount: 80,
-                angle: 60,
-                spread: 70,
-                origin: { x: 0, y: 0.7 }
-            });
-            // Tembakan dari kanan
-            confetti({
-                particleCount: 80,
-                angle: 120,
-                spread: 70,
-                origin: { x: 1, y: 0.7 }
-            });
-        }
-
         // SOAL KHUSUS PENGURANGAN
         const QUIZ_QUESTIONS = [
             { num1: 12, num2: 5, answer: 7, options: [6, 7, 8, 5] },
@@ -326,10 +331,10 @@
 
             if (type === 'correct') {
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, now);
-                osc.frequency.setValueAtTime(659.25, now + 0.08);
-                osc.frequency.setValueAtTime(783.99, now + 0.16);
-                osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
 
                 gain.gain.setValueAtTime(1.0, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
@@ -368,6 +373,45 @@
             }
         }
 
+        // PETA EFEK KONFETI DAN KEMBANG API MERIAH
+        function triggerFireworks() {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+
+        // ANIMASI EMOTICON SEDIH SAAT SALAH JAWAB
+        function triggerSadEmoticon() {
+            const overlay = document.getElementById('sadOverlay');
+            const emoji = document.getElementById('sadEmoji');
+            
+            const sadEmojis = ['😭', '😢', '💔', '🥺', '😞'];
+            emoji.innerText = sadEmojis[Math.floor(Math.random() * sadEmojis.length)];
+
+            overlay.classList.remove('hidden');
+            emoji.classList.remove('animate-sad-emot');
+            
+            // Trigger reflow animation
+            void emoji.offsetWidth;
+            
+            emoji.classList.add('animate-sad-emot');
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 1400);
+        }
+
         function showScreen(screenId) {
             ['loginScreen', 'quizScreen', 'resultScreen'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
@@ -400,7 +444,7 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 60;
+            timeLeft = 60; // 1 Menit
             
             const timerText = document.getElementById('timerText');
             const timerBar = document.getElementById('timerBar');
@@ -421,6 +465,7 @@
                     timerText.classList.add('timer-warning');
                     timerIcon.classList.add('timer-warning');
                     timerBar.className = 'bg-rose-500 h-full transition-all duration-1000 linear';
+                    
                     playSound('warning');
                 } else {
                     timerBar.className = 'bg-amber-400 h-full transition-all duration-1000 linear';
@@ -445,6 +490,7 @@
             isProcessing = true;
 
             playSound('timeout');
+            triggerSadEmoticon();
 
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
@@ -534,8 +580,8 @@
 
             if (selectedOpt === correctOpt) {
                 playSound('correct');
-                triggerFireworks(); // PANGGIL EFEK KEMBANG API
-
+                triggerFireworks(); // Ledakan Kembang Api & Konfeti
+                
                 btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 animate-bounce';
                 correctAnswers++;
                 totalScore += 20;
@@ -547,6 +593,8 @@
                 }, 1400);
             } else {
                 playSound('wrong');
+                triggerSadEmoticon(); // Animasi Emot Sedih saat Salah
+
                 btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-rose-700';
                 
                 allBtns.forEach(b => {
@@ -566,17 +614,12 @@
             clearInterval(timerInterval);
             showScreen('resultScreen');
 
-            // Selebrasi Akhir Kuis
-            if (totalScore >= 60) {
-                triggerFireworks();
-                setTimeout(triggerFireworks, 500);
-            }
-
             document.getElementById('finalCorrectText').innerText = `${correctAnswers} / ${QUIZ_QUESTIONS.length}`;
             document.getElementById('finalScoreText').innerText = totalScore;
 
             const msg = document.getElementById('resultMessage');
             if (totalScore === 100) {
+                triggerFireworks();
                 msg.innerText = `Sempurna, ${studentName}! Kamu berhasil mendapat skor 100! 🎉🌟`;
             } else if (totalScore >= 60) {
                 msg.innerText = `Hebat Sekali, ${studentName}! Nilaimu sangat bagus! 👍`;
