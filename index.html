@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library untuk Kembang Api -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -36,22 +38,64 @@
     </script>
 
     <style>
+        /* ANIMASI BACKGROUND BERGERAK MATEMATIKA */
         body {
-            background-color: #E0F2FE;
-            background-image: radial-gradient(#BAE6FD 2px, transparent 2px);
-            background-size: 24px 24px;
+            background-color: #0f172a;
+            overflow-x: hidden;
+            position: relative;
         }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6, #6366f1);
+            overflow: hidden;
+        }
+
+        .math-symbol {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.18);
+            font-family: 'Fredoka', sans-serif;
+            font-weight: bold;
+            user-select: none;
+            animation: floatUp 12s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(110vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
         .glass-box {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
         }
+
         .btn-bounce:active {
             transform: scale(0.95);
         }
+
         @keyframes pulse-timer {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
+
         .timer-warning {
             animation: pulse-timer 0.6s infinite;
             color: #EF4444 !important;
@@ -60,8 +104,11 @@
 </head>
 <body class="font-sans text-slate-800 min-h-full flex flex-col justify-between antialiased">
 
+    <!-- LATAR BELAKANG ANIMASI SIMBOL MATEMATIKA BERGERAK -->
+    <div class="animated-bg" id="mathBg"></div>
+
     <!-- HEADER -->
-    <header class="bg-sky-500 text-white shadow-lg border-b-4 border-sky-600">
+    <header class="bg-sky-600/90 backdrop-blur-md text-white shadow-lg border-b-4 border-sky-700 relative z-10">
         <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('loginScreen')">
                 <div class="w-10 h-10 rounded-2xl bg-amber-400 text-sky-900 flex items-center justify-center font-bold text-xl shadow">
@@ -74,7 +121,7 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <div id="playerBadge" class="hidden bg-sky-700/60 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
+                <div id="playerBadge" class="hidden bg-sky-800/60 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
                     <i class="fa-solid fa-user-ninja mr-1"></i> <span id="playerNameDisplay">Siswa</span>
                 </div>
                 <!-- SKOR DI HEADER -->
@@ -194,12 +241,52 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-sky-600 text-sky-100 text-xs text-center py-3 font-medium border-t border-sky-400">
+    <footer class="bg-sky-900/80 backdrop-blur-md text-sky-200 text-xs text-center py-3 font-medium border-t border-sky-700 relative z-10">
         <p>&copy; 2026 Kuis Matematika SD Kelas 2 — Belajar Pengurangan Ceria</p>
     </footer>
 
     <!-- LOGIKA JAVASCRIPT -->
     <script>
+        // GENERATE BACKGROUND MATEMATIKA BERGERAK
+        function createMathBackground() {
+            const bgContainer = document.getElementById('mathBg');
+            const symbols = ['-', '+', '=', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '✖', '➗'];
+            const count = 30; // Jumlah elemen bergerak
+
+            for (let i = 0; i < count; i++) {
+                const span = document.createElement('span');
+                span.className = 'math-symbol';
+                span.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                // Variasi posisi, ukuran, dan kecepatan animasi
+                span.style.left = `${Math.random() * 100}%`;
+                span.style.fontSize = `${Math.random() * 2.5 + 1.5}rem`;
+                span.style.animationDuration = `${Math.random() * 8 + 8}s`;
+                span.style.animationDelay = `${Math.random() * 5}s`;
+
+                bgContainer.appendChild(span);
+            }
+        }
+        createMathBackground();
+
+        // EFEK KEMBANG API / KONFETI BANYAK
+        function triggerFireworks() {
+            // Tembakan dari kiri
+            confetti({
+                particleCount: 80,
+                angle: 60,
+                spread: 70,
+                origin: { x: 0, y: 0.7 }
+            });
+            // Tembakan dari kanan
+            confetti({
+                particleCount: 80,
+                angle: 120,
+                spread: 70,
+                origin: { x: 1, y: 0.7 }
+            });
+        }
+
         // SOAL KHUSUS PENGURANGAN
         const QUIZ_QUESTIONS = [
             { num1: 12, num2: 5, answer: 7, options: [6, 7, 8, 5] },
@@ -231,7 +318,6 @@
             const gain = audioCtx.createGain();
             const compressor = audioCtx.createDynamicsCompressor();
 
-            // Rangkaian Audio: Oscillator -> Gain -> Compressor -> Speakers
             osc.connect(gain);
             gain.connect(compressor);
             compressor.connect(audioCtx.destination);
@@ -239,46 +325,42 @@
             const now = audioCtx.currentTime;
 
             if (type === 'correct') {
-                // Suara Ting-Ting Ceria Full Volume
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
-                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                osc.frequency.setValueAtTime(1046.50, now + 0.24);
 
-                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
+                gain.gain.setValueAtTime(1.0, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
 
                 osc.start(now);
                 osc.stop(now + 0.6);
             } else if (type === 'wrong') {
-                // Suara Tet-Tet Salah Full Volume
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(220, now);
                 osc.frequency.setValueAtTime(140, now + 0.15);
 
-                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
+                gain.gain.setValueAtTime(1.0, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
 
                 osc.start(now);
                 osc.stop(now + 0.45);
             } else if (type === 'warning') {
-                // Suara Bip Peringatan 10 Detik Full Volume
                 osc.type = 'square';
                 osc.frequency.setValueAtTime(950, now);
 
-                gain.gain.setValueAtTime(0.8, now); // VOLUME KENCANG
+                gain.gain.setValueAtTime(0.8, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
 
                 osc.start(now);
                 osc.stop(now + 0.12);
             } else if (type === 'timeout') {
-                // Suara Waktu Habis Full Volume
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(350, now);
                 osc.frequency.setValueAtTime(180, now + 0.2);
 
-                gain.gain.setValueAtTime(1.0, now); // MAX VOLUME 100%
+                gain.gain.setValueAtTime(1.0, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
 
                 osc.start(now);
@@ -318,7 +400,7 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 60; // Reset ke 1 Menit (60 Detik)
+            timeLeft = 60;
             
             const timerText = document.getElementById('timerText');
             const timerBar = document.getElementById('timerBar');
@@ -332,17 +414,13 @@
                 const secs = timeLeft % 60;
                 timerText.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 
-                // Progress bar animasi
                 const percentage = (timeLeft / 60) * 100;
                 timerBar.style.width = `${percentage}%`;
 
-                // Peringatan saat waktu tersisa <= 10 detik
                 if (timeLeft <= 10 && timeLeft > 0) {
                     timerText.classList.add('timer-warning');
                     timerIcon.classList.add('timer-warning');
                     timerBar.className = 'bg-rose-500 h-full transition-all duration-1000 linear';
-                    
-                    // Bunyi peringatan kencang setiap detik
                     playSound('warning');
                 } else {
                     timerBar.className = 'bg-amber-400 h-full transition-all duration-1000 linear';
@@ -404,7 +482,6 @@
             document.getElementById('questionProgress').innerText = `${currentQuestionIndex + 1} / ${QUIZ_QUESTIONS.length}`;
             document.getElementById('mathQuestionText').innerText = `${q.num1} - ${q.num2} = ?`;
 
-            // Acak urutan pilihan jawaban
             let opts = [...q.options].sort(() => Math.random() - 0.5);
             const container = document.getElementById('optionsContainer');
             container.innerHTML = '';
@@ -457,15 +534,17 @@
 
             if (selectedOpt === correctOpt) {
                 playSound('correct');
+                triggerFireworks(); // PANGGIL EFEK KEMBANG API
+
                 btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 animate-bounce';
                 correctAnswers++;
-                totalScore += 20; // +20 poin per jawaban benar (Total 100)
+                totalScore += 20;
                 document.getElementById('globalScore').innerText = totalScore;
 
                 setTimeout(() => {
                     currentQuestionIndex++;
                     renderQuestion();
-                }, 1200);
+                }, 1400);
             } else {
                 playSound('wrong');
                 btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-rose-700';
@@ -486,6 +565,12 @@
         function endQuiz() {
             clearInterval(timerInterval);
             showScreen('resultScreen');
+
+            // Selebrasi Akhir Kuis
+            if (totalScore >= 60) {
+                triggerFireworks();
+                setTimeout(triggerFireworks, 500);
+            }
 
             document.getElementById('finalCorrectText').innerText = `${correctAnswers} / ${QUIZ_QUESTIONS.length}`;
             document.getElementById('finalScoreText').innerText = totalScore;
