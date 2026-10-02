@@ -90,7 +90,7 @@
 
             <h2 class="font-fredoka text-3xl font-bold text-sky-900 mb-2">Yuk, Belajar Pengurangan!</h2>
             <p class="text-slate-600 text-sm md:text-base max-w-sm mx-auto mb-6">
-                Kuis matematika ceria untuk teman-teman Kelas 2 SD. Tulis namamu di bawah ini ya!
+                Kuis matematika ceria dengan suara & waktu! Tulis namamu di bawah ini ya!
             </p>
 
             <form onsubmit="handleStartQuiz(event)" class="max-w-sm mx-auto space-y-4">
@@ -108,11 +108,17 @@
 
         <!-- 2. HALAMAN KUIS / SOAL -->
         <section id="quizScreen" class="hidden w-full glass-box rounded-3xl p-5 md:p-8 shadow-xl border-4 border-sky-300">
-            <!-- STATUS BAR -->
-            <div class="flex items-center justify-between mb-6 bg-sky-50 p-3 rounded-2xl border border-sky-200">
+            <!-- STATUS BAR & TIMER -->
+            <div class="flex items-center justify-between mb-4 bg-sky-50 p-3 rounded-2xl border border-sky-200">
                 <div class="flex items-center space-x-2">
                     <span class="bg-sky-500 text-white font-fredoka text-xs px-3 py-1 rounded-full">Soal</span>
                     <span id="questionProgress" class="font-fredoka font-bold text-sky-900 text-base">1 / 10</span>
+                </div>
+
+                <!-- INDIKATOR WAKTU (1 MENIT PER SOAL) -->
+                <div class="flex items-center space-x-2 bg-amber-100 text-amber-900 px-3 py-1 rounded-xl border border-amber-300 font-bold text-sm">
+                    <i class="fa-solid fa-clock text-amber-600 animate-pulse"></i>
+                    <span id="timerText">60 Detik</span>
                 </div>
 
                 <div class="flex items-center space-x-1" id="heartsContainer">
@@ -122,11 +128,23 @@
                 </div>
             </div>
 
+            <!-- VISUAL PROGRESS BAR TIMER -->
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-5">
+                <div id="timerBar" class="bg-amber-400 h-full w-full transition-all duration-1000 ease-linear"></div>
+            </div>
+
             <!-- KARTU SOAL PENGURANGAN -->
             <div class="text-center mb-6">
-                <p class="text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Berapa Hasil Pengurangan Ini?</p>
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <p class="text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-wider">Berapa Hasil Pengurangan Ini?</p>
+                    
+                    <!-- TOMBOL SUARA PEMBACA SOAL -->
+                    <button onclick="speakQuestion()" class="bg-sky-500 hover:bg-sky-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow transition btn-bounce" title="Dengarkan Soal">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                </div>
 
-                <div class="bg-gradient-to-r from-sky-400 to-indigo-500 text-white rounded-3xl p-6 shadow-md border-4 border-white mb-4">
+                <div class="bg-gradient-to-r from-sky-400 to-indigo-500 text-white rounded-3xl p-6 shadow-md border-4 border-white mb-4 relative">
                     <h3 id="mathQuestionText" class="font-fredoka text-5xl md:text-6xl font-bold tracking-wide">
                         15 - 7 = ?
                     </h3>
@@ -138,14 +156,14 @@
                     <span id="helpBtnText">Tampilkan Bantuan Gambar Apel</span>
                 </button>
 
-                <!-- AREA GAMBAR BANTUAN (VISUAL COUNTING) -->
+                <!-- AREA GAMBAR BANTUAN -->
                 <div id="visualHelpBox" class="hidden mt-4 bg-amber-50 p-4 rounded-2xl border-2 border-dashed border-amber-300">
                     <p class="text-xs font-bold text-amber-800 mb-2">Bantuan Visual (Apel awal vs yang dicoret):</p>
                     <div id="applesContainer" class="flex flex-wrap justify-center gap-2 text-2xl"></div>
                 </div>
             </div>
 
-            <!-- PILIHAN JAWABAN (A, B, C, D) -->
+            <!-- PILIHAN JAWABAN -->
             <div id="optionsContainer" class="grid grid-cols-2 gap-3.5 max-w-md mx-auto"></div>
         </section>
 
@@ -189,7 +207,6 @@
 
     <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // BANK SOAL PENGURANGAN SD KELAS 2 (Sesuai Kurikulum)
         const QUESTION_BANK = [
             { num1: 8, num2: 3, answer: 5, options: [4, 5, 6, 3] },
             { num1: 10, num2: 4, answer: 6, options: [5, 6, 7, 4] },
@@ -213,6 +230,11 @@
         let isProcessing = false;
         let studentName = '';
 
+        // HITUNG MUNDUR WAKTU (1 MENIT = 60 DETIK)
+        const QUESTION_TIME = 60; 
+        let timeLeft = QUESTION_TIME;
+        let timerInterval = null;
+
         function showScreen(screenId) {
             ['loginScreen', 'quizScreen', 'resultScreen'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
@@ -233,7 +255,6 @@
         }
 
         function startQuiz() {
-            // Acak soal dari bank soal
             activeQuizQuestions = [...QUESTION_BANK].sort(() => Math.random() - 0.5).slice(0, 10);
             currentQuestionIndex = 0;
             score = 0;
@@ -263,6 +284,7 @@
 
         function renderQuestion() {
             isProcessing = false;
+            clearInterval(timerInterval);
             document.getElementById('visualHelpBox').classList.add('hidden');
             document.getElementById('helpBtnText').innerText = 'Tampilkan Bantuan Gambar Apel';
 
@@ -291,6 +313,88 @@
             });
 
             generateAppleHelp(q.num1, q.num2);
+
+            // Putar Pembacaan Soal secara Otomatis
+            speakQuestion();
+
+            // Jalankan Timer 60 Detik
+            startTimer(q.answer);
+        }
+
+        // FUNSI PEMBACA SUARA (TEXT-TO-SPEECH)
+        function speakQuestion() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+                const q = activeQuizQuestions[currentQuestionIndex];
+                const textToSpeak = `Berapa hasil dari ${q.num1} dikurang ${q.num2}?`;
+
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'id-ID'; // Menggunakan Bahasa Indonesia
+                utterance.rate = 0.85; // Kecepatan agak lambat agar ramah anak
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // FUNGSI TIMER (1 MENIT PER SOAL)
+        function startTimer(correctOpt) {
+            timeLeft = QUESTION_TIME;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut(correctOpt);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerText').innerText = `${timeLeft} Detik`;
+            const percentage = (timeLeft / QUESTION_TIME) * 100;
+            const timerBar = document.getElementById('timerBar');
+            timerBar.style.width = `${percentage}%`;
+
+            if (timeLeft <= 10) {
+                timerBar.className = 'bg-rose-500 h-full w-full transition-all duration-1000 ease-linear';
+            } else {
+                timerBar.className = 'bg-amber-400 h-full w-full transition-all duration-1000 ease-linear';
+            }
+        }
+
+        function handleTimeOut(correctOpt) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => {
+                b.disabled = true;
+                if (parseInt(b.innerText) === correctOpt) {
+                    b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700';
+                }
+            });
+
+            lives--;
+            renderHearts();
+
+            // Ucapkan waktu habis
+            if ('speechSynthesis' in window) {
+                const timeoutUtterance = new SpeechSynthesisUtterance('Waktu habis!');
+                timeoutUtterance.lang = 'id-ID';
+                window.speechSynthesis.speak(timeoutUtterance);
+            }
+
+            setTimeout(() => {
+                if (lives <= 0) {
+                    endQuiz();
+                } else {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            }, 1500);
         }
 
         function generateAppleHelp(total, taken) {
@@ -300,9 +404,9 @@
             for (let i = 0; i < total; i++) {
                 const apple = document.createElement('span');
                 if (i < total - taken) {
-                    apple.innerHTML = '🍎'; // Apel sisa
+                    apple.innerHTML = '🍎';
                 } else {
-                    apple.innerHTML = '<span class="opacity-30 line-through grayscale">🍎</span>'; // Apel dikurang/dicoret
+                    apple.innerHTML = '<span class="opacity-30 line-through grayscale">🍎</span>';
                 }
                 applesContainer.appendChild(apple);
             }
@@ -323,6 +427,7 @@
         function checkAnswer(selectedOpt, correctOpt, btn) {
             if (isProcessing) return;
             isProcessing = true;
+            clearInterval(timerInterval); // Hentikan hitung mundur jika sudah dijawab
 
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
@@ -340,7 +445,6 @@
             } else {
                 btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-rose-700';
                 
-                // Tunjukkan jawaban yang benar
                 allBtns.forEach(b => {
                     if (parseInt(b.innerText) === correctOpt) {
                         b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700';
@@ -362,6 +466,10 @@
         }
 
         function endQuiz() {
+            clearInterval(timerInterval);
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
             showScreen('resultScreen');
 
             document.getElementById('finalScoreText').innerText = `${score} / ${activeQuizQuestions.length}`;
