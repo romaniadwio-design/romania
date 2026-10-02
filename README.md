@@ -77,9 +77,10 @@
                 <div id="playerBadge" class="hidden bg-sky-700/60 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
                     <i class="fa-solid fa-user-ninja mr-1"></i> <span id="playerNameDisplay">Siswa</span>
                 </div>
+                <!-- SKOR DI HEADER -->
                 <div class="bg-amber-400 text-amber-950 px-3 py-1 rounded-full flex items-center space-x-1.5 font-fredoka font-bold text-sm shadow">
-                    <i class="fa-solid fa-star text-amber-600"></i>
-                    <span id="globalStars">0</span>
+                    <i class="fa-solid fa-trophy text-amber-700"></i>
+                    <span>Skor: <span id="globalScore">0</span></span>
                 </div>
             </div>
         </div>
@@ -96,7 +97,7 @@
 
             <h2 class="font-fredoka text-3xl font-bold text-sky-900 mb-2">Siap Belajar Pengurangan?</h2>
             <p class="text-slate-600 text-sm md:text-base max-w-sm mx-auto mb-6">
-                Ada 5 soal tantangan. Waktumu <b>1 menit per soal</b>! Jangan lupa aktifkan suaramu ya 🔊
+                Ada 5 soal tantangan. Waktumu <b>1 menit per soal</b>! Pastikan suaramu aktif ya 🔊
             </p>
 
             <form onsubmit="handleStartQuiz(event)" class="max-w-sm mx-auto space-y-4">
@@ -122,15 +123,9 @@
                 </div>
 
                 <!-- TIMER 1 MENIT -->
-                <div class="flex items-center space-x-2 bg-white px-3 py-1 rounded-xl border border-sky-200 shadow-sm">
+                <div class="flex items-center space-x-2 bg-white px-4 py-1.5 rounded-xl border border-sky-200 shadow-sm">
                     <i class="fa-solid fa-stopwatch text-amber-500 text-lg" id="timerIcon"></i>
-                    <span id="timerText" class="font-fredoka font-bold text-sky-900 text-lg w-10 text-center">01:00</span>
-                </div>
-
-                <div class="flex items-center space-x-1" id="heartsContainer">
-                    <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
-                    <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
-                    <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
+                    <span id="timerText" class="font-fredoka font-bold text-sky-900 text-lg w-12 text-center">01:00</span>
                 </div>
             </div>
 
@@ -176,12 +171,12 @@
 
             <div class="bg-sky-50 rounded-2xl p-4 max-w-xs mx-auto mb-6 border-2 border-sky-200 grid grid-cols-2 gap-3">
                 <div>
-                    <span class="block text-xs font-bold text-sky-600 uppercase">Benar</span>
-                    <span id="finalScoreText" class="font-fredoka text-3xl font-bold text-sky-900">0 / 5</span>
+                    <span class="block text-xs font-bold text-sky-600 uppercase">Jawaban Benar</span>
+                    <span id="finalCorrectText" class="font-fredoka text-3xl font-bold text-sky-900">0 / 5</span>
                 </div>
                 <div>
-                    <span class="block text-xs font-bold text-sky-600 uppercase">Total Bintang</span>
-                    <span id="finalStarsText" class="font-fredoka text-3xl font-bold text-amber-500">0 ★</span>
+                    <span class="block text-xs font-bold text-sky-600 uppercase">Total Skor</span>
+                    <span id="finalScoreText" class="font-fredoka text-3xl font-bold text-amber-500">0</span>
                 </div>
             </div>
 
@@ -205,7 +200,7 @@
 
     <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // SOAL KHUSUS PENGURANGAN SESUAI PERMINTAAN
+        // SOAL KHUSUS PENGURANGAN
         const QUIZ_QUESTIONS = [
             { num1: 12, num2: 5, answer: 7, options: [6, 7, 8, 5] },
             { num1: 15, num2: 3, answer: 12, options: [11, 12, 13, 10] },
@@ -215,9 +210,8 @@
         ];
 
         let currentQuestionIndex = 0;
-        let score = 0;
-        let stars = 0;
-        let lives = 3;
+        let correctAnswers = 0;
+        let totalScore = 0;
         let isProcessing = false;
         let studentName = '';
         
@@ -254,7 +248,7 @@
                 osc.start(now);
                 osc.stop(now + 0.6);
             } else if (type === 'wrong') {
-                // Suara Tet-Tet Salah (Low Sawtooth)
+                // Suara Tet-Tet Salah
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(180, now);
                 osc.frequency.setValueAtTime(130, now + 0.15);
@@ -264,6 +258,16 @@
 
                 osc.start(now);
                 osc.stop(now + 0.4);
+            } else if (type === 'warning') {
+                // Suara Bip Peringatan 10 Detik
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now); // A5
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+                osc.start(now);
+                osc.stop(now + 0.1);
             } else if (type === 'timeout') {
                 // Suara Waktu Habis
                 osc.type = 'triangle';
@@ -299,26 +303,13 @@
 
         function startQuiz() {
             currentQuestionIndex = 0;
-            score = 0;
-            stars = 0;
-            lives = 3;
+            correctAnswers = 0;
+            totalScore = 0;
             isProcessing = false;
 
-            document.getElementById('globalStars').innerText = stars;
+            document.getElementById('globalScore').innerText = totalScore;
             showScreen('quizScreen');
             renderQuestion();
-        }
-
-        function renderHearts() {
-            const container = document.getElementById('heartsContainer');
-            container.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const heart = document.createElement('i');
-                heart.className = i < lives 
-                    ? 'fa-solid fa-heart text-rose-500 text-lg' 
-                    : 'fa-regular fa-heart text-slate-300 text-lg';
-                container.appendChild(heart);
-            }
         }
 
         function startTimer() {
@@ -341,10 +332,14 @@
                 const percentage = (timeLeft / 60) * 100;
                 timerBar.style.width = `${percentage}%`;
 
-                if (timeLeft <= 10) {
+                // Peringatan saat waktu tersisa <= 10 detik
+                if (timeLeft <= 10 && timeLeft > 0) {
                     timerText.classList.add('timer-warning');
                     timerIcon.classList.add('timer-warning');
                     timerBar.className = 'bg-rose-500 h-full transition-all duration-1000 linear';
+                    
+                    // Bunyi peringatan setiap detik
+                    playSound('warning');
                 } else {
                     timerBar.className = 'bg-amber-400 h-full transition-all duration-1000 linear';
                 }
@@ -379,14 +374,11 @@
                 }
             });
 
-            lives--;
-            renderHearts();
-
             setTimeout(() => {
-                if (lives <= 0 || currentQuestionIndex + 1 >= QUIZ_QUESTIONS.length) {
+                currentQuestionIndex++;
+                if (currentQuestionIndex >= QUIZ_QUESTIONS.length) {
                     endQuiz();
                 } else {
-                    currentQuestionIndex++;
                     renderQuestion();
                 }
             }, 1500);
@@ -397,12 +389,11 @@
             document.getElementById('visualHelpBox').classList.add('hidden');
             document.getElementById('helpBtnText').innerText = 'Tampilkan Bantuan Gambar Apel';
 
-            if (currentQuestionIndex >= QUIZ_QUESTIONS.length || lives <= 0) {
+            if (currentQuestionIndex >= QUIZ_QUESTIONS.length) {
                 endQuiz();
                 return;
             }
 
-            renderHearts();
             startTimer();
 
             const q = QUIZ_QUESTIONS[currentQuestionIndex];
@@ -463,9 +454,9 @@
             if (selectedOpt === correctOpt) {
                 playSound('correct');
                 btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 animate-bounce';
-                score++;
-                stars += 20;
-                document.getElementById('globalStars').innerText = stars;
+                correctAnswers++;
+                totalScore += 20; // +20 poin per jawaban benar (Total 100)
+                document.getElementById('globalScore').innerText = totalScore;
 
                 setTimeout(() => {
                     currentQuestionIndex++;
@@ -481,16 +472,9 @@
                     }
                 });
 
-                lives--;
-                renderHearts();
-
                 setTimeout(() => {
-                    if (lives <= 0) {
-                        endQuiz();
-                    } else {
-                        currentQuestionIndex++;
-                        renderQuestion();
-                    }
+                    currentQuestionIndex++;
+                    renderQuestion();
                 }, 1500);
             }
         }
@@ -499,16 +483,16 @@
             clearInterval(timerInterval);
             showScreen('resultScreen');
 
-            document.getElementById('finalScoreText').innerText = `${score} / ${QUIZ_QUESTIONS.length}`;
-            document.getElementById('finalStarsText').innerText = `${stars} ★`;
+            document.getElementById('finalCorrectText').innerText = `${correctAnswers} / ${QUIZ_QUESTIONS.length}`;
+            document.getElementById('finalScoreText').innerText = totalScore;
 
             const msg = document.getElementById('resultMessage');
-            if (score === 5) {
-                msg.innerText = `Sempurna, ${studentName}! Kamu menjawab semua soal dengan benar! 🎉🌟`;
-            } else if (score >= 3) {
+            if (totalScore === 100) {
+                msg.innerText = `Sempurna, ${studentName}! Kamu berhasil mendapat skor 100! 🎉🌟`;
+            } else if (totalScore >= 60) {
                 msg.innerText = `Hebat Sekali, ${studentName}! Nilaimu sangat bagus! 👍`;
             } else {
-                msg.innerText = `Tetap Semangat, ${studentName}! Belajar lagi pasti bisa mendapat skor sempurna! 💪`;
+                msg.innerText = `Tetap Semangat, ${studentName}! Belajar lagi pasti bisa dapat nilai 100! 💪`;
             }
         }
     </script>
