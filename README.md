@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Pengurangan Seru SD Kelas 2</title>
+    <title>Kuis Matematika Seru SD Kelas 2 - Romania</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -21,9 +21,9 @@
                 extend: {
                     colors: {
                         kid: {
-                            bg: '#F0F9FF',
-                            primary: '#0284C7',
-                            accent: '#F59E0B',
+                            bg: '#0F172A',
+                            primary: '#8B5CF6',
+                            accent: '#F43F5E',
                             correct: '#10B981',
                             wrong: '#EF4444'
                         }
@@ -38,14 +38,14 @@
     </script>
 
     <style>
-        /* ANIMASI LATAR BELAKANG BERGERAK MATEMATIKA */
+        /* TEMA WARNA MODERN BOLD GRADIENT */
         body {
-            background-color: #0c192e;
+            background: #0B0F19;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Continuous Moving Grid & Math Background */
+        /* Continuous Moving Grid Background */
         .math-bg {
             position: fixed;
             top: 0;
@@ -55,76 +55,106 @@
             z-index: 0;
             pointer-events: none;
             background-image: 
-                radial-gradient(rgba(56, 189, 248, 0.25) 2px, transparent 2px),
-                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 32px 32px, 64px 64px, 64px 64px;
-            animation: moveBg 25s linear infinite;
+                radial-gradient(rgba(139, 92, 246, 0.4) 2.5px, transparent 2.5px),
+                linear-gradient(to right, rgba(244, 63, 94, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px, 80px 80px, 80px 80px;
+            animation: moveBg 18s linear infinite;
         }
 
         @keyframes moveBg {
-            0% {
-                background-position: 0 0, 0 0, 0 0;
-            }
-            100% {
-                background-position: 320px 640px, 320px 320px, 320px 320px;
-            }
+            0% { background-position: 0 0, 0 0, 0 0; }
+            100% { background-position: 400px 800px, 400px 400px, 400px 400px; }
+        }
+
+        /* Glowing Aurora Orbs yang Energik */
+        .aurora-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 8s ease-in-out infinite alternate;
+        }
+
+        .aurora-1 {
+            top: -15%;
+            left: -10%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, #7C3AED, #EC4899, transparent);
+        }
+
+        .aurora-2 {
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, #06B6D4, #3B82F6, transparent);
+            animation-delay: -4s;
+        }
+
+        .aurora-3 {
+            top: 30%;
+            right: 20%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, #F59E0B, #EF4444, transparent);
+            opacity: 0.35;
+            animation-delay: -2s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 60px) scale(1.2); }
         }
 
         /* Floating Math Elements */
         .math-symbol {
             position: absolute;
-            color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.22);
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
             font-family: 'Fredoka', sans-serif;
             font-weight: bold;
             user-select: none;
-            animation: floatSymbol 12s ease-in-out infinite alternate;
+            animation: floatSymbol 10s ease-in-out infinite alternate;
         }
 
         @keyframes floatSymbol {
             0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            50% { transform: translateY(-30px) rotate(15deg) scale(1.1); }
-            100% { transform: translateY(20px) rotate(-15deg) scale(0.95); }
+            50% { transform: translateY(-40px) rotate(20deg) scale(1.2); }
+            100% { transform: translateY(30px) rotate(-18deg) scale(0.9); }
         }
 
+        /* KARTU JAUH LEBIH BESAR DENGAN STYLING PREMIUM */
         .glass-box {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            border: 4px solid rgba(56, 189, 248, 0.6);
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(24px);
+            border: 4px solid rgba(244, 63, 94, 0.5);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.3);
         }
 
         .btn-bounce:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         @keyframes pulse-timer {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
         }
 
         .timer-warning {
-            animation: pulse-timer 0.6s infinite;
+            animation: pulse-timer 0.5s infinite;
             color: #EF4444 !important;
         }
 
         /* ANIMASI EMOTICON SEDIH SAAT SALAH */
         @keyframes floatSadEmot {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -40%) scale(0.4) rotate(-10deg);
-            }
-            25% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
-            }
-            75% {
-                opacity: 1;
-                transform: translate(-50%, -70%) scale(1) rotate(5deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -100%) scale(0.8) rotate(0deg);
-            }
+            0% { opacity: 0; transform: translate(-50%, -40%) scale(0.4) rotate(-10deg); }
+            25% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(0deg); }
+            75% { opacity: 1; transform: translate(-50%, -70%) scale(1.1) rotate(5deg); }
+            100% { opacity: 0; transform: translate(-50%, -100%) scale(0.8) rotate(0deg); }
         }
 
         .animate-sad-emot {
@@ -134,43 +164,48 @@
 </head>
 <body class="font-sans text-slate-800 min-h-full flex flex-col justify-between antialiased">
 
-    <!-- MATEMATIKA ANIMATED BACKGROUND -->
+    <!-- EFEK AURORA NEON GLOW DI BACKGROUND -->
+    <div class="aurora-orb aurora-1"></div>
+    <div class="aurora-orb aurora-2"></div>
+    <div class="aurora-orb aurora-3"></div>
+
+    <!-- MATEMATIKA ANIMATED BACKGROUND GRID -->
     <div class="math-bg"></div>
 
     <!-- SIMBOL MATEMATIKA MELAYANG DI BACKGROUND -->
-    <div class="math-symbol text-6xl top-[10%] left-[5%]" style="animation-delay: 0s;">+</div>
-    <div class="math-symbol text-7xl top-[20%] right-[8%]" style="animation-delay: -2s;">−</div>
-    <div class="math-symbol text-5xl top-[60%] left-[8%]" style="animation-delay: -4s;">×</div>
-    <div class="math-symbol text-6xl top-[75%] right-[12%]" style="animation-delay: -6s;">÷</div>
-    <div class="math-symbol text-8xl top-[40%] right-[45%]" style="animation-delay: -3s; color: rgba(255, 255, 255, 0.08);">12−5</div>
-    <div class="math-symbol text-5xl top-[85%] left-[40%]" style="animation-delay: -5s;">=</div>
+    <div class="math-symbol text-7xl top-[10%] left-[5%]" style="animation-delay: 0s;">+</div>
+    <div class="math-symbol text-8xl top-[20%] right-[8%]" style="animation-delay: -2s;">−</div>
+    <div class="math-symbol text-7xl top-[60%] left-[6%]" style="animation-delay: -4s;">kg</div>
+    <div class="math-symbol text-7xl top-[75%] right-[10%]" style="animation-delay: -6s;">ons</div>
+    <div class="math-symbol text-9xl top-[40%] right-[45%]" style="animation-delay: -3s; color: rgba(255, 255, 255, 0.15);">1 kg</div>
+    <div class="math-symbol text-7xl top-[85%] left-[40%]" style="animation-delay: -5s;">=</div>
 
-    <!-- OVERLAY EMOTICON SEDIH (DITAMPILKAN KETIKA JAWABAN SALAH) -->
+    <!-- OVERLAY EMOTICON SEDIH -->
     <div id="sadOverlay" class="fixed inset-0 pointer-events-none z-50 hidden">
-        <div id="sadEmoji" class="absolute top-1/2 left-1/2 text-8xl md:text-9xl filter drop-shadow-2xl">
+        <div id="sadEmoji" class="absolute top-1/2 left-1/2 text-9xl md:text-[12rem] filter drop-shadow-2xl">
             😭
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header class="bg-sky-500/90 backdrop-blur-md text-white shadow-xl border-b-4 border-sky-600 relative z-10">
-        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('loginScreen')">
-                <div class="w-10 h-10 rounded-2xl bg-amber-400 text-sky-900 flex items-center justify-center font-bold text-xl shadow-lg border-2 border-amber-200">
-                    <i class="fa-solid fa-calculator"></i>
+    <!-- HEADER DENGAN GRADIENT BARU -->
+    <header class="bg-gradient-to-r from-purple-700 via-pink-600 to-rose-600 backdrop-blur-md text-white shadow-2xl border-b-4 border-rose-400 relative z-10">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4 cursor-pointer" onclick="showScreen('loginScreen')">
+                <div class="w-12 h-12 rounded-2xl bg-amber-400 text-purple-950 flex items-center justify-center font-bold text-2xl shadow-xl border-2 border-amber-200">
+                    <i class="fa-solid fa-weight-hanging"></i>
                 </div>
                 <div>
-                    <h1 class="font-fredoka font-bold text-lg md:text-xl leading-tight tracking-wide">KUIS MATEMATIKA</h1>
-                    <p class="text-[10px] md:text-xs text-sky-100 font-semibold">Pengurangan Kelas 2 SD</p>
+                    <h1 class="font-fredoka font-bold text-xl md:text-2xl leading-tight tracking-wide">KUIS MATEMATIKA</h1>
+                    <p class="text-xs md:text-sm text-rose-100 font-semibold">Pengukuran Berat Kelas 3 SD</p>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
-                <div id="playerBadge" class="hidden bg-sky-700/80 px-3 py-1 rounded-full text-xs font-bold text-sky-100 border border-sky-400">
-                    <i class="fa-solid fa-user-ninja mr-1"></i> <span id="playerNameDisplay">Siswa</span>
+            <div class="flex items-center space-x-4">
+                <div id="playerBadge" class="hidden bg-purple-900/80 px-4 py-1.5 rounded-full text-xs md:text-sm font-bold text-purple-100 border border-purple-400 shadow">
+                    <i class="fa-solid fa-user-ninja mr-1.5 text-amber-300"></i> <span id="playerNameDisplay">Siswa</span>
                 </div>
                 <!-- SKOR DI HEADER -->
-                <div class="bg-amber-400 text-amber-950 px-3 py-1 rounded-full flex items-center space-x-1.5 font-fredoka font-bold text-sm shadow">
+                <div class="bg-amber-400 text-amber-950 px-4 py-1.5 rounded-full flex items-center space-x-2 font-fredoka font-bold text-base shadow-lg border-2 border-amber-300">
                     <i class="fa-solid fa-trophy text-amber-700"></i>
                     <span>Skor: <span id="globalScore">0</span></span>
                 </div>
@@ -178,27 +213,33 @@
         </div>
     </header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-2xl w-full mx-auto p-4 my-auto relative z-10 flex-grow flex items-center justify-center">
+    <!-- MAIN CONTAINER (LEBIH LEBAR DAN BESAR) -->
+    <main class="max-w-4xl w-full mx-auto p-4 md:p-6 my-auto relative z-10 flex-grow flex items-center justify-center">
 
-        <!-- 1. HALAMAN LOGIN/MULAI -->
-        <section id="loginScreen" class="w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl text-center">
-            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-amber-100 border-4 border-amber-400 flex items-center justify-center text-4xl text-amber-500 shadow-inner">
-                <i class="fa-solid fa-face-smile-wink"></i>
+        <!-- 1. HALAMAN LOGIN/MULAI (EMOTICON DIUBAH KE SENYUM GEMBIRA) -->
+        <section id="loginScreen" class="w-full glass-box rounded-3xl p-8 md:p-12 shadow-2xl text-center">
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-tr from-amber-300 to-yellow-400 border-4 border-amber-200 flex items-center justify-center text-6xl text-amber-800 shadow-lg animate-bounce">
+                <i class="fa-solid fa-face-grin-stars"></i>
             </div>
 
-            <h2 class="font-fredoka text-3xl font-bold text-sky-900 mb-2">Siap Belajar Pengurangan?</h2>
-            <p class="text-slate-600 text-sm md:text-base max-w-sm mx-auto mb-6 font-medium">
+            <!-- IDENTITAS PEMILIK KUIS -->
+            <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-purple-100 to-rose-100 text-purple-900 px-5 py-2 rounded-full border-2 border-purple-300 font-fredoka text-sm md:text-base font-bold mb-4 shadow-sm">
+                <i class="fa-solid fa-crown text-amber-500 text-lg"></i>
+                <span>Kuis oleh: <b class="text-rose-600">Romania</b></span>
+            </div>
+
+            <h2 class="font-fredoka text-3xl md:text-5xl font-bold text-purple-950 mb-3">Siap Belajar Ukur Berat?</h2>
+            <p class="text-slate-600 text-base md:text-lg max-w-md mx-auto mb-8 font-medium leading-relaxed">
                 Ada 5 soal tantangan. Waktumu <b>1 menit per soal</b>! Pastikan suaramu aktif ya 🔊
             </p>
 
-            <form onsubmit="handleStartQuiz(event)" class="max-w-sm mx-auto space-y-4">
+            <form onsubmit="handleStartQuiz(event)" class="max-w-md mx-auto space-y-5">
                 <div>
-                    <label class="block text-left font-fredoka text-sky-800 text-sm font-semibold mb-1">Tulis Namamu:</label>
-                    <input type="text" id="studentNameInput" required placeholder="Contoh: Budi" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none font-bold text-slate-700 text-center text-lg shadow-sm">
+                    <label class="block text-left font-fredoka text-purple-900 text-base md:text-lg font-semibold mb-2">Tulis Namamu:</label>
+                    <input type="text" id="studentNameInput" required placeholder="Contoh: Budi" class="w-full px-5 py-4 rounded-2xl border-4 border-purple-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-200 outline-none font-bold text-slate-800 text-center text-xl md:text-2xl shadow-inner transition">
                 </div>
 
-                <button type="submit" class="btn-bounce w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-fredoka font-bold text-xl py-3.5 px-6 rounded-2xl shadow-lg border-b-4 border-amber-600 transition flex items-center justify-center space-x-2">
+                <button type="submit" class="btn-bounce w-full bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-amber-950 font-fredoka font-bold text-2xl py-4 px-8 rounded-2xl shadow-xl border-b-4 border-amber-700 transition flex items-center justify-center space-x-3">
                     <span>Mulai Kuis</span>
                     <i class="fa-solid fa-play"></i>
                 </button>
@@ -206,78 +247,67 @@
         </section>
 
         <!-- 2. HALAMAN KUIS / SOAL -->
-        <section id="quizScreen" class="hidden w-full glass-box rounded-3xl p-5 md:p-8 shadow-2xl">
+        <section id="quizScreen" class="hidden w-full glass-box rounded-3xl p-6 md:p-10 shadow-2xl">
             <!-- STATUS BAR & TIMER -->
-            <div class="flex items-center justify-between mb-4 bg-sky-50 p-3 rounded-2xl border border-sky-200">
-                <div class="flex items-center space-x-2">
-                    <span class="bg-sky-500 text-white font-fredoka text-xs px-3 py-1 rounded-full">Soal</span>
-                    <span id="questionProgress" class="font-fredoka font-bold text-sky-900 text-base">1 / 5</span>
+            <div class="flex items-center justify-between mb-6 bg-purple-50 p-4 rounded-2xl border-2 border-purple-200">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-gradient-to-r from-purple-600 to-rose-600 text-white font-fredoka text-sm md:text-base px-4 py-1.5 rounded-full shadow">Soal</span>
+                    <span id="questionProgress" class="font-fredoka font-bold text-purple-950 text-xl md:text-2xl">1 / 5</span>
                 </div>
 
                 <!-- TIMER 1 MENIT -->
-                <div class="flex items-center space-x-2 bg-white px-4 py-1.5 rounded-xl border border-sky-200 shadow-sm">
-                    <i class="fa-solid fa-stopwatch text-amber-500 text-lg" id="timerIcon"></i>
-                    <span id="timerText" class="font-fredoka font-bold text-sky-900 text-lg w-12 text-center">01:00</span>
+                <div class="flex items-center space-x-2.5 bg-white px-5 py-2 rounded-2xl border-2 border-purple-200 shadow-sm">
+                    <i class="fa-solid fa-stopwatch text-amber-500 text-2xl" id="timerIcon"></i>
+                    <span id="timerText" class="font-fredoka font-bold text-purple-950 text-xl md:text-2xl w-16 text-center">01:00</span>
                 </div>
             </div>
 
             <!-- PROGRESS BAR WAKTU -->
-            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-6">
-                <div id="timerBar" class="bg-amber-400 h-full w-full transition-all duration-1000 linear"></div>
+            <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden mb-8 shadow-inner">
+                <div id="timerBar" class="bg-gradient-to-r from-amber-400 to-yellow-500 h-full w-full transition-all duration-1000 linear"></div>
             </div>
 
-            <!-- KARTU SOAL PENGURANGAN -->
-            <div class="text-center mb-6">
-                <p class="text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Berapa Hasil Pengurangan Ini?</p>
+            <!-- KARTU SOAL PENGUKURAN BERAT -->
+            <div class="text-center mb-8">
+                <p class="text-xs md:text-sm font-bold text-purple-600 uppercase tracking-widest mb-3">Pertanyaan Kuis:</p>
 
-                <div class="bg-gradient-to-r from-sky-400 to-indigo-500 text-white rounded-3xl p-6 shadow-lg border-4 border-white mb-4">
-                    <h3 id="mathQuestionText" class="font-fredoka text-5xl md:text-6xl font-bold tracking-wide">
-                        12 - 5 = ?
+                <div class="bg-gradient-to-r from-purple-700 via-indigo-700 to-rose-600 text-white rounded-3xl p-6 md:p-8 shadow-2xl border-4 border-white">
+                    <h3 id="mathQuestionText" class="font-fredoka text-2xl md:text-4xl font-bold tracking-wide leading-relaxed">
+                        Soal...
                     </h3>
-                </div>
-
-                <!-- BANTUAN VISUAL GAMBAR -->
-                <button onclick="toggleVisualHelp()" class="text-xs font-bold text-sky-700 bg-sky-100 hover:bg-sky-200 px-3 py-1.5 rounded-xl border border-sky-300 transition inline-flex items-center gap-1.5">
-                    <i class="fa-solid fa-apple-whole text-rose-500"></i>
-                    <span id="helpBtnText">Tampilkan Bantuan Gambar Apel</span>
-                </button>
-
-                <div id="visualHelpBox" class="hidden mt-4 bg-amber-50 p-4 rounded-2xl border-2 border-dashed border-amber-300">
-                    <p class="text-xs font-bold text-amber-800 mb-2">Hitung Apel (Apel pudar = yang dikurangi):</p>
-                    <div id="applesContainer" class="flex flex-wrap justify-center gap-1.5 text-xl md:text-2xl max-h-40 overflow-y-auto"></div>
                 </div>
             </div>
 
             <!-- PILIHAN JAWABAN -->
-            <div id="optionsContainer" class="grid grid-cols-2 gap-3.5 max-w-md mx-auto"></div>
+            <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 max-w-2xl mx-auto"></div>
         </section>
 
         <!-- 3. HALAMAN HASIL / SKOR -->
-        <section id="resultScreen" class="hidden w-full glass-box rounded-3xl p-6 md:p-8 shadow-2xl text-center">
-            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-amber-100 border-4 border-amber-400 flex items-center justify-center text-5xl text-amber-500 shadow-md">
+        <section id="resultScreen" class="hidden w-full glass-box rounded-3xl p-8 md:p-12 shadow-2xl text-center">
+            <div class="w-28 h-28 mx-auto mb-5 rounded-full bg-amber-100 border-4 border-amber-400 flex items-center justify-center text-6xl text-amber-500 shadow-lg">
                 <i class="fa-solid fa-trophy"></i>
             </div>
 
-            <h2 class="font-fredoka text-3xl font-bold text-sky-900 mb-1">Hore! Kuis Selesai!</h2>
-            <p id="resultMessage" class="text-slate-600 text-sm font-medium mb-6">Hebat sekali, kamu berhasil menyelesaikan tantangan!</p>
+            <h2 class="font-fredoka text-4xl md:text-5xl font-bold text-purple-950 mb-2">Hore! Kuis Selesai!</h2>
+            <p id="resultMessage" class="text-slate-600 text-base md:text-lg font-medium mb-8">Hebat sekali, kamu berhasil menyelesaikan tantangan!</p>
 
-            <div class="bg-sky-50 rounded-2xl p-4 max-w-xs mx-auto mb-6 border-2 border-sky-200 grid grid-cols-2 gap-3">
+            <div class="bg-purple-50 rounded-3xl p-6 max-w-md mx-auto mb-8 border-2 border-purple-200 grid grid-cols-2 gap-4 shadow-sm">
                 <div>
-                    <span class="block text-xs font-bold text-sky-600 uppercase">Jawaban Benar</span>
-                    <span id="finalCorrectText" class="font-fredoka text-3xl font-bold text-sky-900">0 / 5</span>
+                    <span class="block text-xs md:text-sm font-bold text-purple-600 uppercase tracking-wider">Jawaban Benar</span>
+                    <span id="finalCorrectText" class="font-fredoka text-4xl font-bold text-purple-950">0 / 5</span>
                 </div>
                 <div>
-                    <span class="block text-xs font-bold text-sky-600 uppercase">Total Skor</span>
-                    <span id="finalScoreText" class="font-fredoka text-3xl font-bold text-amber-500">0</span>
+                    <span class="block text-xs md:text-sm font-bold text-purple-600 uppercase tracking-wider">Total Skor</span>
+                    <span id="finalScoreText" class="font-fredoka text-4xl font-bold text-amber-500">0</span>
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xs mx-auto">
-                <button onclick="startQuiz()" class="btn-bounce w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-fredoka font-bold py-3 px-6 rounded-2xl shadow-md border-b-4 border-amber-600 transition flex items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+                <button onclick="startQuiz()" class="btn-bounce w-full bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-amber-950 font-fredoka font-bold text-xl py-4 px-8 rounded-2xl shadow-lg border-b-4 border-amber-700 transition flex items-center justify-center gap-3">
                     <i class="fa-solid fa-rotate-right"></i>
                     <span>Coba Lagi</span>
                 </button>
-                <button onclick="showScreen('loginScreen')" class="btn-bounce w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-fredoka font-bold py-3 px-6 rounded-2xl shadow-md transition">
+                <button onclick="showScreen('loginScreen')" class="btn-bounce w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-fredoka font-bold text-xl py-4 px-8 rounded-2xl shadow-md transition">
                     Ganti Nama
                 </button>
             </div>
@@ -286,19 +316,39 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-sky-900/80 backdrop-blur-md text-sky-200 text-xs text-center py-3 font-medium border-t border-sky-700/50 relative z-10">
-        <p>&copy; 2026 Kuis Matematika SD Kelas 2 — Belajar Pengurangan Ceria</p>
+    <footer class="bg-slate-950/90 backdrop-blur-md text-purple-200 text-xs md:text-sm text-center py-4 font-medium border-t border-purple-900/50 relative z-10">
+        <p>&copy; 2026 Kuis Matematika SD Kelas 3 — Dibuat oleh <b>Romania</b></p>
     </footer>
 
     <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // SOAL KHUSUS PENGURANGAN
+        // SOAL PENGUKURAN BERAT BENDA
         const QUIZ_QUESTIONS = [
-            { num1: 12, num2: 5, answer: 7, options: [6, 7, 8, 5] },
-            { num1: 15, num2: 3, answer: 12, options: [11, 12, 13, 10] },
-            { num1: 23, num2: 12, answer: 11, options: [10, 11, 12, 13] },
-            { num1: 32, num2: 15, answer: 17, options: [16, 17, 18, 15] },
-            { num1: 43, num2: 27, answer: 16, options: [15, 16, 17, 18] }
+            {
+                question: "Alat yang digunakan untuk mengukur berat benda adalah…",
+                answer: "Timbangan",
+                options: ["Timbangan", "Termometer", "Timbangan Badan", "Meteran"]
+            },
+            {
+                question: "Satuan baku yang digunakan untuk mengukur berat adalah…",
+                answer: "Ons dan kilogram",
+                options: ["Sentimeter dan meter", "Ons dan kilogram", "Liter dan mililiter", "Menit dan jam"]
+            },
+            {
+                question: "3 kilogram (kg) sama dengan … ons",
+                answer: "30 ons",
+                options: ["300 ons", "3.000 ons", "30 ons", "3 ons"]
+            },
+            {
+                question: "Jika sebuah semangka beratnya 5 kg, maka dalam ons beratnya adalah …",
+                answer: "50 ons",
+                options: ["5.000 ons", "500 ons", "5 ons", "50 ons"]
+            },
+            {
+                question: "Contoh benda yang beratnya biasanya diukur dalam kilogram (kg) adalah …",
+                answer: "Beras",
+                options: ["Sebungkus Permen", "Lemari", "Beras", "Mobil"]
+            }
         ];
 
         let currentQuestionIndex = 0;
@@ -311,7 +361,7 @@
         let timeLeft = 60; // 1 Menit
         let timerInterval = null;
 
-        // WEB AUDIO SYNTHESIZER (AUDIO FULL VOLUME KENCANG)
+        // WEB AUDIO SYNTHESIZER
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(type) {
@@ -468,7 +518,7 @@
                     
                     playSound('warning');
                 } else {
-                    timerBar.className = 'bg-amber-400 h-full transition-all duration-1000 linear';
+                    timerBar.className = 'bg-gradient-to-r from-amber-400 to-yellow-500 h-full transition-all duration-1000 linear';
                 }
             };
 
@@ -497,8 +547,8 @@
 
             const q = QUIZ_QUESTIONS[currentQuestionIndex];
             allBtns.forEach(b => {
-                if (parseInt(b.innerText) === q.answer) {
-                    b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700';
+                if (b.getAttribute('data-answer') === q.answer) {
+                    b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-emerald-700 text-left flex items-center space-x-4';
                 }
             });
 
@@ -514,8 +564,6 @@
 
         function renderQuestion() {
             isProcessing = false;
-            document.getElementById('visualHelpBox').classList.add('hidden');
-            document.getElementById('helpBtnText').innerText = 'Tampilkan Bantuan Gambar Apel';
 
             if (currentQuestionIndex >= QUIZ_QUESTIONS.length) {
                 endQuiz();
@@ -526,48 +574,23 @@
 
             const q = QUIZ_QUESTIONS[currentQuestionIndex];
             document.getElementById('questionProgress').innerText = `${currentQuestionIndex + 1} / ${QUIZ_QUESTIONS.length}`;
-            document.getElementById('mathQuestionText').innerText = `${q.num1} - ${q.num2} = ?`;
+            document.getElementById('mathQuestionText').innerText = q.question;
 
-            let opts = [...q.options].sort(() => Math.random() - 0.5);
             const container = document.getElementById('optionsContainer');
             container.innerHTML = '';
 
-            opts.forEach(opt => {
+            const labels = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = 'btn-bounce option-btn w-full bg-white hover:bg-sky-100 text-sky-900 font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-md border-2 border-sky-200 hover:border-sky-400 transition text-center';
-                btn.innerText = opt;
+                btn.className = 'btn-bounce option-btn w-full bg-white hover:bg-purple-100 text-purple-950 font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-md border-3 border-purple-200 hover:border-purple-400 transition text-left flex items-center space-x-4';
+                btn.setAttribute('data-answer', opt);
+                btn.innerHTML = `
+                    <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-base shrink-0 border border-purple-300">${labels[idx]}</span>
+                    <span class="flex-grow">${opt}</span>
+                `;
                 btn.onclick = () => checkAnswer(opt, q.answer, btn);
                 container.appendChild(btn);
             });
-
-            generateAppleHelp(q.num1, q.num2);
-        }
-
-        function generateAppleHelp(total, taken) {
-            const applesContainer = document.getElementById('applesContainer');
-            applesContainer.innerHTML = '';
-
-            for (let i = 0; i < total; i++) {
-                const apple = document.createElement('span');
-                if (i < total - taken) {
-                    apple.innerHTML = '🍎';
-                } else {
-                    apple.innerHTML = '<span class="opacity-30 line-through grayscale">🍎</span>';
-                }
-                applesContainer.appendChild(apple);
-            }
-        }
-
-        function toggleVisualHelp() {
-            const helpBox = document.getElementById('visualHelpBox');
-            const helpText = document.getElementById('helpBtnText');
-            if (helpBox.classList.contains('hidden')) {
-                helpBox.classList.remove('hidden');
-                helpText.innerText = 'Sembunyikan Bantuan Gambar';
-            } else {
-                helpBox.classList.add('hidden');
-                helpText.innerText = 'Tampilkan Bantuan Gambar Apel';
-            }
         }
 
         function checkAnswer(selectedOpt, correctOpt, btn) {
@@ -582,7 +605,7 @@
                 playSound('correct');
                 triggerFireworks(); // Ledakan Kembang Api & Konfeti
                 
-                btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 animate-bounce';
+                btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-emerald-700 text-left flex items-center space-x-4 animate-bounce';
                 correctAnswers++;
                 totalScore += 20;
                 document.getElementById('globalScore').innerText = totalScore;
@@ -595,11 +618,11 @@
                 playSound('wrong');
                 triggerSadEmoticon(); // Animasi Emot Sedih saat Salah
 
-                btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-rose-700';
+                btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-rose-700 text-left flex items-center space-x-4';
                 
                 allBtns.forEach(b => {
-                    if (parseInt(b.innerText) === correctOpt) {
-                        b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-2xl py-3.5 px-4 rounded-2xl shadow-lg border-b-4 border-emerald-700';
+                    if (b.getAttribute('data-answer') === correctOpt) {
+                        b.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-emerald-700 text-left flex items-center space-x-4';
                     }
                 });
 
