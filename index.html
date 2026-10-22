@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
@@ -162,7 +162,7 @@
         }
     </style>
 </head>
-<body class="font-sans text-slate-800 min-h-full flex flex-col justify-between antialiased">
+<body class="font-sans text-slate-800 min-h-screen flex flex-col justify-between antialiased">
 
     <!-- EFEK AURORA NEON GLOW DI BACKGROUND -->
     <div class="aurora-orb aurora-1"></div>
@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <!-- HEADER DENGAN GRADIENT BARU -->
+    <!-- HEADER -->
     <header class="bg-gradient-to-r from-purple-700 via-pink-600 to-rose-600 backdrop-blur-md text-white shadow-2xl border-b-4 border-rose-400 relative z-10">
         <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-4 cursor-pointer" onclick="showScreen('loginScreen')">
@@ -213,10 +213,10 @@
         </div>
     </header>
 
-    <!-- MAIN CONTAINER (LEBIH LEBAR DAN BESAR) -->
+    <!-- MAIN CONTAINER -->
     <main class="max-w-4xl w-full mx-auto p-4 md:p-6 my-auto relative z-10 flex-grow flex items-center justify-center">
 
-        <!-- 1. HALAMAN LOGIN/MULAI (EMOTICON DIUBAH KE SENYUM GEMBIRA) -->
+        <!-- 1. HALAMAN LOGIN/MULAI -->
         <section id="loginScreen" class="w-full glass-box rounded-3xl p-8 md:p-12 shadow-2xl text-center">
             <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-tr from-amber-300 to-yellow-400 border-4 border-amber-200 flex items-center justify-center text-6xl text-amber-800 shadow-lg animate-bounce">
                 <i class="fa-solid fa-face-grin-stars"></i>
@@ -230,7 +230,7 @@
 
             <h2 class="font-fredoka text-3xl md:text-5xl font-bold text-purple-950 mb-3">Siap Belajar Ukur Berat?</h2>
             <p class="text-slate-600 text-base md:text-lg max-w-md mx-auto mb-8 font-medium leading-relaxed">
-                Ada 5 soal tantangan. Waktumu <b>1 menit per soal</b>! Pastikan suaramu aktif ya 🔊
+                Ada 5 soal tantangan. Waktumu <b>1 menit 30 detik per soal</b>! Pastikan suaramu aktif ya 🔊
             </p>
 
             <form onsubmit="handleStartQuiz(event)" class="max-w-md mx-auto space-y-5">
@@ -255,10 +255,10 @@
                     <span id="questionProgress" class="font-fredoka font-bold text-purple-950 text-xl md:text-2xl">1 / 5</span>
                 </div>
 
-                <!-- TIMER 1 MENIT -->
+                <!-- TIMER 90 DETIK (01:30) -->
                 <div class="flex items-center space-x-2.5 bg-white px-5 py-2 rounded-2xl border-2 border-purple-200 shadow-sm">
                     <i class="fa-solid fa-stopwatch text-amber-500 text-2xl" id="timerIcon"></i>
-                    <span id="timerText" class="font-fredoka font-bold text-purple-950 text-xl md:text-2xl w-16 text-center">01:00</span>
+                    <span id="timerText" class="font-fredoka font-bold text-purple-950 text-xl md:text-2xl w-16 text-center">01:30</span>
                 </div>
             </div>
 
@@ -357,8 +357,9 @@
         let isProcessing = false;
         let studentName = '';
         
-        // Timer Variables
-        let timeLeft = 60; // 1 Menit
+        // Timer Variables (90 Detik = 1.5 Menit per soal)
+        const TOTAL_TIME_PER_QUESTION = 90;
+        let timeLeft = TOTAL_TIME_PER_QUESTION;
         let timerInterval = null;
 
         // WEB AUDIO SYNTHESIZER
@@ -381,10 +382,10 @@
 
             if (type === 'correct') {
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
-                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                osc.frequency.setValueAtTime(1046.50, now + 0.24);
 
                 gain.gain.setValueAtTime(1.0, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
@@ -423,7 +424,6 @@
             }
         }
 
-        // PETA EFEK KONFETI DAN KEMBANG API MERIAH
         function triggerFireworks() {
             const count = 200;
             const defaults = { origin: { y: 0.7 } };
@@ -441,7 +441,6 @@
             fire(0.1, { spread: 120, startVelocity: 45 });
         }
 
-        // ANIMASI EMOTICON SEDIH SAAT SALAH JAWAB
         function triggerSadEmoticon() {
             const overlay = document.getElementById('sadOverlay');
             const emoji = document.getElementById('sadEmoji');
@@ -452,7 +451,6 @@
             overlay.classList.remove('hidden');
             emoji.classList.remove('animate-sad-emot');
             
-            // Trigger reflow animation
             void emoji.offsetWidth;
             
             emoji.classList.add('animate-sad-emot');
@@ -494,7 +492,7 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 60; // 1 Menit
+            timeLeft = TOTAL_TIME_PER_QUESTION; // 90 Detik
             
             const timerText = document.getElementById('timerText');
             const timerBar = document.getElementById('timerBar');
@@ -508,10 +506,10 @@
                 const secs = timeLeft % 60;
                 timerText.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 
-                const percentage = (timeLeft / 60) * 100;
+                const percentage = (timeLeft / TOTAL_TIME_PER_QUESTION) * 100;
                 timerBar.style.width = `${percentage}%`;
 
-                if (timeLeft <= 10 && timeLeft > 0) {
+                if (timeLeft <= 15 && timeLeft > 0) {
                     timerText.classList.add('timer-warning');
                     timerIcon.classList.add('timer-warning');
                     timerBar.className = 'bg-rose-500 h-full transition-all duration-1000 linear';
@@ -603,7 +601,7 @@
 
             if (selectedOpt === correctOpt) {
                 playSound('correct');
-                triggerFireworks(); // Ledakan Kembang Api & Konfeti
+                triggerFireworks();
                 
                 btn.className = 'option-btn w-full bg-emerald-500 text-white font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-emerald-700 text-left flex items-center space-x-4 animate-bounce';
                 correctAnswers++;
@@ -616,7 +614,7 @@
                 }, 1400);
             } else {
                 playSound('wrong');
-                triggerSadEmoticon(); // Animasi Emot Sedih saat Salah
+                triggerSadEmoticon();
 
                 btn.className = 'option-btn w-full bg-rose-500 text-white font-fredoka font-bold text-lg md:text-xl py-4 px-5 rounded-2xl shadow-xl border-b-4 border-rose-700 text-left flex items-center space-x-4';
                 
