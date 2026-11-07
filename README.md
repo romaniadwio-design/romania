@@ -126,9 +126,9 @@
                 </div>
                 <div class="truncate">
                     <div class="flex items-center gap-1.5">
-                        <h1 class="font-display font-extrabold text-sm tracking-wide text-white leading-tight truncate">WorshipSlide <span class="text-amber-400">PMK NS</span></h1>
+                        <h1 class="font-display font-extrabold text-sm tracking-wide text-white leading-tight truncate">WorshipSlide <span class="text-amber-400">GMKI_Komdaniel</span></h1>
                     </div>
-                    <p class="text-[11px] text-slate-400 font-medium truncate">Persekutuan Mahasiswa Kristen Nafiri Sion</p>
+                    <p class="text-[11px] text-slate-400 font-medium truncate">GERAKAN MAHASISWA KRISTEN INDONESIA </p>
                 </div>
             </div>
             
@@ -326,7 +326,7 @@
                         <circle cx="50" cy="50" r="35" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="2"/>
                         <path id="topArcStage" d="M 14,50 A 36,36 0 1,1 86,50" fill="none"/>
                         <text font-size="6.8" font-weight="800" fill="#1E3A8A" letter-spacing="0.4">
-                            <textPath href="#topArcStage" startOffset="50%" text-anchor="middle">PMK NAFIRI SION</textPath>
+                            <textPath href="#topArcStage" startOffset="50%" text-anchor="middle"> GMKI_Komdaniel</textPath>
                         </text>
                         <path d="M31 28 H69 V50 C69 65 50 76 50 76 C50 76 31 65 31 50 Z" fill="#1D4ED8" stroke="#F59E0B" stroke-width="2.5"/>
                         <path d="M50 31 V68 M37 44 H63" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
@@ -335,7 +335,7 @@
                     </svg>
                 </div>
                 <div class="text-left drop-shadow-md">
-                    <p class="font-display font-extrabold text-xs sm:text-sm tracking-wider text-white uppercase">PMK Nafiri Sion</p>
+                    <p class="font-display font-extrabold text-xs sm:text-sm tracking-wider text-white uppercase">GMKI_Komdaniel</p>
                     <p class="text-[10px] sm:text-xs text-amber-300 font-semibold">Ibadah Persekutuan</p>
                 </div>
             </div>
